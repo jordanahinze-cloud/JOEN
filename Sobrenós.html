@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>JOEN | Sobre Nós</title>
+
+   
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+   
+
+    <style>
+
+        :root {
+
+            /* VERDE (DESTAQUE) */
+
+            --color-cta-main: #4CAF50; /* Verde Grama (Botão Principal) */
+
+            --color-cta-hover: #AEEA00; /* Verde Elétrico (Destaque) */
+
+           
+
+            /* AZUL (FUNDOS E BORDAS) */
+
+            --color-accent-secondary: #003366; /* Azul Escuro (Fundo de Destaque) */
+
+            --color-accent-hover: #4da6ff; /* Azul Claro (Hover Secundário) */
+
+
+
+            /* GERAL */
+
+            --color-background-light: #f5f5dc; /* Cor de fundo da página */
+
+            --color-text-dark: #333; /* Texto principal (em fundos claros) */
+
+            --color-text-light: #fff; /* Texto claro (em fundos escuros) */
+
+            --font-main: 'Poppins', Arial, sans-serif;
+
+        }
+
+
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body, html {
+
+            width: 100%;
+
+            min-height: 100vh;
+
+            font-family: var(--font-main);
+
+            background-color: var(--color-background-light);
+
+            color: var(--color-text-dark);
+
+            line-height: 1.6;
+
+        }
+
+       
+
+        /* --- ESTILOS DO HEADER (Simplificado) --- */
+
+
+
+        .main-header {
+
+            background: rgba(245, 245, 220, 0.9);
+
+            position: fixed;
+
+            width: 100%;
+
+            z-index: 100;
+
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+        }
+
+        .header__content {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 4px 50px;
+
+            max-width: 1400px;
+
+            margin: 0 auto;
+
+        }
+
+
+
+        /* Removendo a imagem da logo, o texto da logo e o ícone de menu antigos */
+
+        .logo img, .logo-text, .nav-toggle, .logo-container {
+
+            display: none !important;
+
+        }
+
+       
+
+        /* ÍCONE DE VOLTAR (NOVO ELEMENTO NO LUGAR DO MENU/LOGO) */
+
+        .back-icon-link {
+
+            display: flex;
+
+            align-items: center;
+
+            font-size: 1.8em;
+
+            color: var(--color-accent-secondary);
+
+            cursor: pointer;
+
+            padding: 10px;
+
+            margin-left: -10px; /* Alinhamento suave */
+
+            border-radius: 5px;
+
+            transition: color 0.2s, background-color 0.2s;
+
+            text-decoration: none;
+
+        }
+
+        .back-icon-link:hover {
+
+            color: var(--color-cta-main);
+
+            background-color: rgba(76, 175, 80, 0.1); /* Para um hover suave */
+
+        }
+
+
+
+
+
+        /* Mantendo os outros elementos ocultos */
+
+        .main-nav, .search-container, .carrinho-icon-container { display: none !important; }
+
+
+
+        /* Área de Ícones/Botões à direita */
+
+        .icones-e-botoes {
+
+            display: flex;
+
+            align-items: center; /* Centraliza verticalmente o ícone */
+
+            justify-content: flex-end;
+
+            width: 100%;
+
+        }
+
+       
+
+        /* Oculta o botão antigo (se a classe fosse reutilizada) */
+
+        .login-btn { display: none; }
+
+
+
+        /* NOVO ESTILO: ÍCONE DE CONFIGURAÇÕES */
+
+        .settings-icon-link {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 1.8em; /* Tamanho do ícone */
+
+            color: var(--color-accent-secondary);
+
+            width: 40px; /* Tamanho do target de clique */
+
+            height: 40px;
+
+            border-radius: 50%; /* Fundo circular */
+
+            transition: color 0.3s, background-color 0.3s, transform 0.3s ease-in-out;
+
+            text-decoration: none;
+
+            cursor: pointer;
+
+            margin-left: auto; /* Empurra para a direita */
+
+            border: 1px solid transparent; /* Para evitar CLS no hover */
+
+        }
+
+
+
+        .settings-icon-link:hover {
+
+            color: var(--color-cta-main); /* Muda a cor do ícone no hover */
+
+            background-color: rgba(76, 175, 80, 0.1); /* Fundo verde suave no hover */
+
+            transform: rotate(90deg); /* Efeito de giro sutil */
+
+        }
+
+       
+
+        @media (max-width: 600px) {
+
+            .header__content { padding: 10px 20px; }
+
+            .back-icon-link { margin-left: 0; }
+
+        }
+
+
+
+        /* --- ESTILOS DO CONTEÚDO SOBRE NÓS --- */
+
+
+
+        .about-section {
+
+            /* AJUSTE AQUI: Reduzido de 150px para 100px para diminuir o espaço superior */
+
+            padding: 100px 20px 80px;
+
+            max-width: 1000px;
+
+            margin: 0 auto;
+
+            text-align: center;
+
+        }
+
+
+
+        .about-section h1 {
+
+            font-size: 3em;
+
+            color: var(--color-accent-secondary);
+
+            margin-bottom: 40px;
+
+            font-weight: 700;
+
+        }
+
+
+
+        .content-card {
+
+            background-color: var(--color-text-light);
+
+            padding: 40px;
+
+            border-radius: 12px;
+
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+
+            text-align: left;
+
+            margin-bottom: 30px;
+
+        }
+
+
+
+        .content-card h2 {
+
+            font-size: 1.8em;
+
+            color: var(--color-cta-main);
+
+            margin-top: 0;
+
+            margin-bottom: 20px;
+
+            border-bottom: 2px solid var(--color-cta-hover);
+
+            padding-bottom: 10px;
+
+        }
+
+
+
+        .content-card p {
+
+            margin-bottom: 20px;
+
+            color: var(--color-text-dark);
+
+        }
+
+
+
+        .highlight {
+
+            font-weight: 600;
+
+            color: var(--color-accent-secondary);
+
+        }
+
+       
+
+        /* Estilos para Missão e Visão */
+
+        .mission-vision {
+
+            display: flex;
+
+            gap: 30px;
+
+            margin-top: 40px;
+
+            margin-bottom: 40px;
+
+        }
+
+
+
+        .mission-vision div {
+
+            flex: 1;
+
+            padding: 30px;
+
+            border-radius: 12px;
+
+            background-color: var(--color-accent-secondary);
+
+            color: var(--color-text-light);
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+
+            text-align: center;
+
+        }
+
+       
+
+        .mission-vision h3 {
+
+            color: var(--color-cta-hover);
+
+            margin-bottom: 15px;
+
+            font-size: 1.4em;
+
+        }
+
+
+
+        /* --- NOVOS ESTILOS PARA FUNDADORA E LOGO --- */
+
+
+
+        .creator-section {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 40px;
+
+            background-color: var(--color-text-light);
+
+            padding: 50px;
+
+            border-radius: 12px;
+
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+
+            margin-bottom: 40px;
+
+            border-left: 8px solid var(--color-cta-main);
+
+            border-right: 8px solid var(--color-accent-secondary);
+
+        }
+
+       
+
+        .creator-info {
+
+            flex: 1;
+
+            text-align: left;
+
+        }
+
+
+
+        .creator-info h2 {
+
+            color: var(--color-accent-secondary);
+
+            margin-bottom: 15px;
+
+            font-size: 2em;
+
+        }
+
+
+
+        .creator-info h3 {
+
+            color: var(--color-cta-main);
+
+            font-size: 1.2em;
+
+            margin-bottom: 20px;
+
+        }
+
+
+
+        .creator-image {
+
+            width: 180px;
+
+            height: 180px;
+
+            border-radius: 50%; /* Transforma a imagem em círculo */
+
+            object-fit: cover;
+
+            border: 5px solid var(--color-cta-main);
+
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+
+            flex-shrink: 0;
+
+        }
+
+       
+
+        .logo-display {
+
+            display: flex;
+
+            flex-direction: column;
+
+            align-items: center;
+
+            flex: 0 0 300px; /* Largura fixa para o logo */
+
+            text-align: center;
+
+        }
+
+
+
+        .logo-display img {
+
+            max-width: 100%;
+
+            height: auto;
+
+            border-radius: 8px;
+
+            margin-bottom: 10px;
+
+            border: 1px solid #ccc;
+
+        }
+
+
+
+        /* --- ESTILOS DE NEGÓCIOS E FEEDBACK --- */
+
+       
+
+        .interaction-grid {
+
+            display: flex;
+
+            gap: 30px;
+
+            margin-top: 40px;
+
+            text-align: center;
+
+        }
+
+
+
+        .interaction-card {
+
+            flex: 1;
+
+            background-color: var(--color-text-light);
+
+            padding: 30px;
+
+            border-radius: 12px;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+
+            border-top: 5px solid var(--color-cta-main); /* Linha Verde no topo */
+
+        }
+
+       
+
+        .interaction-card.blue-border {
+
+            border-top: 5px solid var(--color-accent-secondary); /* Linha Azul no topo */
+
+        }
+
+
+
+        .interaction-card h3 {
+
+            color: var(--color-accent-secondary);
+
+            font-size: 1.6em;
+
+            margin-bottom: 15px;
+
+        }
+
+       
+
+        .interaction-card p {
+
+            color: var(--color-text-dark);
+
+            font-size: 0.95em;
+
+            margin-bottom: 25px;
+
+        }
+
+       
+
+        /* Estilo para Botões de Ação Secundária */
+
+        .action-button {
+
+            display: inline-block;
+
+            padding: 10px 20px;
+
+            border-radius: 5px;
+
+            font-weight: 600;
+
+            text-decoration: none;
+
+            transition: background-color 0.3s, transform 0.2s;
+
+            margin-top: 10px;
+
+        }
+
+       
+
+        /* Botão Verde */
+
+        .action-button.green {
+
+            background-color: var(--color-cta-main);
+
+            color: var(--color-text-light);
+
+        }
+
+       
+
+        .action-button.green:hover {
+
+            background-color: var(--color-cta-hover);
+
+            color: var(--color-text-dark);
+
+            transform: translateY(-2px);
+
+        }
+
+
+
+        /* Botão Azul */
+
+        .action-button.blue {
+
+            background-color: var(--color-accent-secondary);
+
+            color: var(--color-text-light);
+
+        }
+
+
+
+        .action-button.blue:hover {
+
+            background-color: var(--color-accent-hover);
+
+            transform: translateY(-2px);
+
+        }
+
+       
+
+
+
+        @media (max-width: 768px) {
+
+            .about-section h1 { font-size: 2.5em; }
+
+            .content-card { padding: 25px; }
+
+            .mission-vision { flex-direction: column; }
+
+            .interaction-grid { flex-direction: column; }
+
+           
+
+            /* Responsividade para Fundadora e Logo */
+
+            .creator-section {
+
+                flex-direction: column; /* Empilha os elementos no mobile */
+
+                padding: 30px;
+
+                border: none;
+
+                border-top: 8px solid var(--color-cta-main);
+
+            }
+
+            .creator-info {
+
+                text-align: center;
+
+                order: 2; /* Move a info para baixo da imagem */
+
+            }
+
+            .creator-image {
+
+                width: 150px;
+
+                height: 150px;
+
+                margin-bottom: 20px;
+
+                order: 1; /* Move a imagem para cima */
+
+            }
+
+            .logo-display {
+
+                margin-top: 30px;
+
+                flex: none;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+
+<body>
+
+    <!-- HEADER MINIMALISTA -->
+
+    <header class="main-header">
+
+        <div class="header__content">
+
+            <!-- ÍCONE DE VOLTAR (Substitui Logo e Menu) -->
+
+            <a href="index.html" class="back-icon-link" aria-label="Voltar para a página inicial">
+
+                <i class="fas fa-arrow-left"></i>
+
+            </a>
+
+           
+
+            <div class="icones-e-botoes">
+
+                <!-- ÍCONE DE CONFIGURAÇÕES (Substitui o botão Voltar à Loja) -->
+
+                <a href="index.html" class="settings-icon-link" aria-label="Configurações">
+
+                    <i class="fas fa-cog"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <main>
+
+        <section class="about-section">
+
+            <h1>Sobre a JOEN</h1>
+
+
+
+            <!-- Seção de Propósito -->
+
+            <div class="content-card">
+
+                <h2>Nosso Propósito: Conectando a Tecnologia à Essência Natural do Futuro</h2>
+
+               
+
+                <p>A JOEN surge com a missão de eliminar a distância entre o avanço tecnológico e a urgência das necessidades ecológicas. Não nos contentamos com a inércia; buscamos ativamente transformá-la em ação por meio do desenvolvimento e da promoção de soluções sustentáveis e inovadoras. <span class="highlight"></span>.</p>
+
+               
+
+                <p>Nossos objetivos centrais são claros e ambiciosos. Aspiramos a ser uma fonte de inspiração e educação ambiental para as novas gerações, moldando mentes que valorizam o planeta. Estamos empenhados em criar e implementar soluções que harmonizem de forma eficaz a tecnologia e a natureza, e, acima de tudo, em pavimentar um futuro onde a energia limpa e a sustentabilidade deixem de ser um ideal e passem a ser a prioridade. <span class="highlight"></span>.</p>
+
+               
+
+                <p>Encaramos de frente os grandes desafios ambientais da atualidade. Nosso principal foco é combater a escassez de inovações acessíveis no setor da sustentabilidade. Acreditamos firmemente que não basta apenas falar sobre o meio ambiente; é preciso agir. Por isso, a JOEN se dedica a promover uma mudança ativa, inspirando você e toda uma nova geração a fazer parte dessa transformação essencial.</p>
+
+                <p>Ao escolher a JOEN, você está optando por um futuro onde a sustentabilidade e a energia limpa são a norma. Você contribui ativamente para a construção de um planeta mais consciente, responsável e vibrante. Junte-se a nós nessa jornada de transformação!</p>
+
+            </div>
+
+           
+
+            <!-- NOVO BLOCO: FUNDADORA E LOGO -->
+
+            <div class="creator-section">
+
+               
+
+                <!-- Coluna 1: Foto e Texto da Fundadora -->
+
+                <img
+
+                    src="7b04c3b5-8e3e-4820-991f-050fc651571d.jpeg"
+
+                    alt="Foto da fundadora da JOEN"
+
+                    class="creator-image"
+
+                    onerror="this.onerror=null;this.src='7b04c3b5-8e3e-4820-991f-050fc651571d';"
+
+                >
+
+
+
+                <div class="creator-info">
+
+                    <h2>Conheça a Fundadora, Jordana Hinze Chaves</h2>
+
+                    <h3>CEO & Empreendedora da JOEN</h3>
+
+                    <p>
+
+                        A JOEN foi fundada em 2025 por Jordana Hinze Chaves, estudante do Ensino Médio do Paraná, que pretende cursar Engenharia Ambiental. Inspirada pelas feiras de ciências e da conscientização ambiental realizadas em seu estado, Jordana idealizou a criação da JOEN como uma forma de unir educação, inovação e sustentabilidade.
+
+Motivada pelo desejo de melhorar o mundo e conscientizar as pessoas sobre a importância da preservação ambiental, ela transformou seu interesse em uma iniciativa que busca promover soluções sustentáveis e inspirar uma nova geração comprometida com o futuro do planeta.
+                    </p>
+
+                </div>
+
+               
+
+                <!-- Coluna 2: Logo e Breve Explicação -->
+
+                <div class="logo-display">
+
+                    <img
+
+                        src="fotodalogocomlegenda.png"
+
+                        alt="Logo oficial da JOEN em destaque"
+
+                        onerror="this.onerror=null;this.src='fotodalogocomlegenda';"
+
+                    >
+
+                    <p style="font-size: 0.9em;">
+
+                    A identidade visual da JOEN - Jornada de Energia Natural é a nossa visão de futuro. O globo terrestre estilizado simboliza a escala global dos desafios sustentáveis que a sociedade contemporânea enfrenta.
+O nome "Jornada de Energia Natural" define o nosso método de trabalho: um caminho contínuo de inovação, aprendizado e colaboração. A nossa logo ao todo simboliza a harmonia entre tecnologia e a natureza, unindo o compromisso com a sustentabilidade e a energia limpa à busca por um futuro consciente.
+
+                    </p>
+
+                </div>
+
+
+
+            </div>
+
+           
+
+            <!-- Seção de Missão e Visão -->
+
+            <div class="mission-vision">
+
+                <div>
+
+                    <h3>Nossa Missão</h3>
+
+                    <p>Oferecer produtos naturais, orgânicos e sustentáveis, garantindo transparência e excelência do produtor ao consumidor.</p>
+
+                </div>
+
+                <div>
+
+                    <h3>Nossa Visão</h3>
+
+                    <p>Ser a plataforma líder em bem-estar natural, inspirando uma comunidade global a viver de forma mais consciente e sustentável.</p>
+
+                </div>
+
+            </div>
+
+           
+
+            <!-- BLOCO: INTERAÇÃO E NEGÓCIOS -->
+
+           
+
+            <div class="interaction-grid">
+
+               
+
+                <!-- CARD 1: Melhorias e Avaliações (FEEDBACK) -->
+
+                <div class="interaction-card green-border">
+
+                    <h3>Sugerir Melhorias (Avaliações)</h3>
+
+                    <p>Sua opinião é fundamental para o crescimento da JOEN. Ajude-nos a aprimorar nossos produtos, serviço e experiência de compra.</p>
+
+                    <a href="#" class="action-button green">
+
+                        <i class="fas fa-comments"></i> Deixar Feedback
+
+                    </a>
+
+                </div>
+
+               
+
+                <!-- CARD 2: Investimento e Parcerias -->
+
+                <div class="interaction-card blue-border">
+
+                    <h3>Investimento e Parcerias</h3>
+
+                    <p>Tem interesse em apoiar o crescimento da JOEN ou estabelecer uma parceria estratégica de longo prazo? Entre em contato com nosso departamento comercial.</p>
+
+                    <a href="#" class="action-button blue">
+
+                        <i class="fas fa-handshake"></i> Proposta de Negócios
+
+                    </a>
+
+                </div>
+
+            </div>
+
+           
+
+            <div class="interaction-grid">
+
+                <!-- CARD 3: Venda de Produtos / Fornecedor -->
+
+                <div class="interaction-card green-border" style="flex: 0 0 100%;">
+
+                    <h3>Oferecer Produto para Venda (Seja um Fornecedor)</h3>
+
+                    <p>Você produz itens naturais, orgânicos ou sustentáveis de alta qualidade que se alinham com a missão da JOEN? Estamos sempre em busca de novos parceiros.</p>
+
+                    <a href="#" class="action-button green">
+
+                        <i class="fas fa-leaf"></i> Candidatura de Fornecedor
+
+                    </a>
+
+                </div>
+
+            </div>
+
+           
+
+        </section>
+
+    </main>
+
+</body>
+
+</html>

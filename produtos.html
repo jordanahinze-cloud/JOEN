@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JOEN | Principais Produtos</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 1. Variáveis CSS (Custom Properties) */
+        :root {
+            --color-primary: #1e8449;
+            --color-secondary: #2788ae;
+            --color-background-light: #f5f5dc; /* Cor de fundo (Bege/Creme) */
+            --color-text-dark: #333;
+            --color-text-light: #fff;
+            --color-header-bg: rgba(0, 0, 0, 0.9);
+            --font-main: 'Poppins', Arial, sans-serif;
+        }
+/* NOVO ESTILO PARA O PREÇO */
+.preco {
+    display: inline-block;
+    background-color: var(--color-secondary); /* Verde vibrante */
+    color: var(--color-text-light); /* Texto branco */
+    font-size: 1.2em; /* Texto maior */
+    font-weight: 700; /* Extra bold */
+    padding: 8px 15px;
+    border-radius: 25px; /* Formato de pílula */
+    margin-bottom: 20px; /* Mais espaço antes do botão */
+    box-shadow: 0 4px 8px rgba(39, 174, 96, 0.4); /* Sombra suave verde */
+    letter-spacing: 0.5px;
+    transition: transform 0.2s;
+}
+
+.preco:hover {
+    transform: scale(1.05); /* Efeito sutil no hover */
+}
+        /* 2. Reset Básico & Estilos Globais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            min-height: 100vh;
+            font-family: var(--font-main);
+            background-color: var(--color-background-light);
+            color: var(--color-text-dark);
+            scroll-behavior: smooth;
+        }
+        
+        /* 3. Estilos do Header e Navegação */
+        .main-header { 
+            background: rgba(245, 245, 220, 0.9); 
+            position: fixed; 
+            width: 100%; 
+            z-index: 100; 
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
+        }
+        
+        .header__content { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 4px 50px; 
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .logo-container { 
+            display: flex; 
+            align-items: center; 
+            flex-shrink: 0;
+        }
+        .logo img { 
+            height: 100px;
+            width: auto; 
+            border-radius: 10px; 
+        }
+
+        /* Estilos para os links principais remanescentes (Sobre, Contato) */
+        .links-principais-header {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+            margin-left: 30px; /* Espaço após a logo */
+            flex-grow: 1; /* Permite que ocupe o espaço central */
+            align-items: center;
+        }
+        .nav__link {
+            color: var(--color-text-dark);
+            font-weight: 600;
+            text-decoration: none;
+            padding: 5px 0;
+            transition: color 0.3s;
+        }
+        .nav__link:hover {
+            color: var(--color-primary);
+        }
+
+        /* Menu Principal de Links (Volta a ser oculto no desktop) */
+        .main-nav { 
+            display: none; /* Oculto no desktop, só aparece via nav-toggle no mobile */
+            order: 2; 
+        }
+        
+        /* Oculta o Botão de Sanduíche no Desktop */
+        .nav-toggle { 
+            display: none; 
+            background: none; 
+            border: none; 
+            color: var(--color-primary); 
+            font-size: 1.8em; 
+            cursor: pointer; 
+            z-index: 101; 
+            order: 6; 
+            flex-shrink: 0;
+        }
+
+        /* Estilos da Barra de Pesquisa e NOVO Dropdown de Categoria */
+        .search-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+            flex-shrink: 0;
+            z-index: 90; 
+        }
+        .search-container input[type="search"] {
+            padding: 8px 30px 8px 15px;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            font-family: var(--font-main);
+            font-size: 1em;
+            width: 250px;
+            transition: width 0.3s, border-color 0.3s;
+        }
+        .search-container input[type="search"]:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            width: 300px;
+        }
+        .search-container > i {
+            position: absolute;
+            right: 10px;
+            color: #777;
+            pointer-events: none;
+        }
+        
+        /* Container do Dropdown de Categorias */
+        .categorias-dropdown {
+            position: absolute;
+            top: 100%; 
+            left: 0;
+            width: 250px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-5px);
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+        }
+
+        /* MOSTRA O DROPDOWN QUANDO O MOUSE ESTIVER SOBRE O search-container */
+        .search-container:hover .categorias-dropdown,
+        .search-container:focus-within .categorias-dropdown {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(5px);
+        }
+        
+        .categorias-dropdown ul {
+            list-style: none;
+            text-align: left;
+        }
+        .categorias-dropdown ul li a {
+            display: block;
+            padding: 8px 15px;
+            text-decoration: none;
+            color: var(--color-text-dark);
+            font-weight: 500;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .categorias-dropdown ul li a:hover,
+        .categoria-link.active {
+            background-color: var(--color-background-light);
+            color: var(--color-primary);
+        }
+
+        /* Estilos dos Botões/Ícones (mantidos) */
+        .icones-e-botoes { 
+            display: flex; 
+            align-items: center; 
+            gap: 15px; 
+            order: 3; 
+            flex-shrink: 0;
+        }
+        .carrinho-link { position: relative; color: var(--color-primary); font-size: 1.6em; text-decoration: none; transition: color 0.3s; z-index: 102; }
+        .carrinho-contador { position: absolute; top: -8px; right: -8px; background-color: #3c64e7; color: var(--color-text-light); border-radius: 50%; width: 20px; height: 20px; line-height: 20px; text-align: center; font-size: 0.7em; font-weight: 700; z-index: 103; text-shadow: none; }
+        .login-btn { display: inline-block; padding: 8px 15px; background-color: var(--color-primary); color: var(--color-text-light); text-decoration: none; font-weight: 600; border-radius: 5px; transition: background-color 0.3s, transform 0.2s; border: 1px solid var(--color-primary); z-index: 102; position: relative; }
+        .login-btn:hover { background-color: var(--color-secondary); border-color: var(--color-secondary); transform: scale(1.05); }
+
+
+        /* 4. Estilos para a seção de Produtos (mantidos) */
+        .produtos-section {
+            padding: 120px 50px 100px; 
+            text-align: center;
+        }
+
+        .produtos-section h2 {
+            font-size: 2.5em;
+            color: var(--color-primary);
+            margin-bottom: 40px;
+        }
+
+        .produtos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .produto-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, opacity 0.3s;
+        }
+        
+        .produto-card[style*="display: none"] {
+            opacity: 0;
+            height: 0;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            border: none;
+            box-shadow: none;
+            transition: opacity 0.3s;
+        }
+
+        .produto-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .produto-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .card-button {
+            display: inline-block;
+            padding: 10px 25px;
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 50px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .card-button:hover {
+            background-color: var(--color-secondary);
+            transform: scale(1.05);
+        }
+
+        /* Media Queries (Responsividade) */
+        @media (max-width: 950px) { 
+            .search-container input[type="search"] {
+                width: 180px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .header__content {
+                padding: 10px 20px; 
+            }
+            .logo img {
+                height: 65px;
+            }
+            .links-principais-header {
+                display: none; /* Oculta os links de topo no mobile, eles vão para o menu lateral */
+            }
+            .search-container {
+                margin-right: 0;
+                order: 3;
+                width: 100%;
+                margin-top: 10px;
+            }
+            .search-container input[type="search"] {
+                width: 100%;
+            }
+            /* Esconde o dropdown de categorias no mobile */
+            .categorias-dropdown {
+                display: none; 
+            }
+            
+            /* O MENU DE LINKS VIRA O LATERAL NO MOBILE */
+            .main-nav { 
+                display: block; 
+                position: absolute; 
+                top: 0; 
+                right: 0; 
+                width: 70%; 
+                height: 100vh; 
+                background: var(--color-header-bg); 
+                transform: translateX(100%); 
+                transition: transform 0.3s ease-in-out; 
+                padding-top: 100px;
+                margin: 0;
+            }
+            .main-nav.open { 
+                transform: translateX(0); 
+            }
+            .nav-toggle { 
+                display: block; 
+                order: 6;
+            }
+            
+            /* Ajusta a lista de links para o layout de coluna no menu lateral */
+            .main-nav .nav__list { /* Seletor mais específico */
+                flex-direction: column; 
+                align-items: center; 
+                justify-content: flex-start;
+                width: 100%; 
+                gap: 25px; 
+            }
+            .main-nav .nav__link { 
+                color: var(--color-text-light); 
+                font-size: 1.2em; 
+            }
+
+            .icones-e-botoes {
+                order: 2; 
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="header__content">
+            <div class="logo-container">
+                <a href="index.html" class="logo">
+                    <img src="fotodalogocomlegenda.png" alt="Logo JOEN - Símbolo de energia natural">
+                </a>
+                
+                <ul class="links-principais-header">
+                    <li><a href="Sobrenós.html" class="nav__link">Sobre</a></li>
+                    <li><a href="chat.html" class="nav__link">Fale Conosco</a></li>
+                </ul>
+            </div>
+
+            <nav class="main-nav">
+                <ul class="nav__list">
+                    <li><a href="index.html#sobre" class="nav__link">Sobre</a></li>
+                    <li><a href="#produtos" class="nav__link">Produtos</a></li>
+                    <li><a href="index.html#contato" class="nav__link">Contato</a></li>
+                </ul>
+            </nav>
+            
+            <div class="icones-e-botoes">
+                <div class="search-container">
+                    <input type="search" placeholder="Pesquisar produtos..." aria-label="Pesquisar produtos">
+                    <i class="fas fa-search"></i>
+                    
+                    <div class="categorias-dropdown">
+                        <ul>
+                            <li><a href="#" data-filter="todos" class="categoria-link active">Todos os Produtos</a></li>
+                            <li><a href="#" data-filter="domesticos" class="categoria-link">Domésticos</a></li>
+                            <li><a href="#" data-filter="agricolas" class="categoria-link">Agrotecnologia</a></li>
+                            <li><a href="#" data-filter="acessorios" class="categoria-link">Acessórios</a></li>
+                            <li><a href="#" data-filter="eletronicos" class="categoria-link">eletronicos</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="carrinho-icon-container">
+                    <a href="#" class="carrinho-link" aria-label="Ver Carrinho de Compras">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="carrinho-contador">0</span>
+                    </a>
+                </div>
+                <a href="login.html" class="login-btn">Login</a>
+                
+                <button class="nav-toggle" aria-label="Abrir menu de navegação">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="produtos" class="produtos-section">
+            <h2>Nossos Principais Produtos</h2>
+            
+            <div class="produtos-grid" id="produtos-grid-container">
+                
+                <div class="produto-card categoria-domesticos">
+                    <img src="como-funciona-placa-solar.webp" alt="Painel Solar de Alta Eficiência">
+                    <h3>Painel Solar JOEN 550W</h3>
+                    <p>Tecnologia de ponta para máxima captação de energia solar.</p>
+                    <span class="preco">R$ 1.500,00</span>
+                    <a href="#" class="card-button">Ver Detalhes</a>
+                </div>
+                
+                <div class="produto-card categoria-domesticos">
+                    <img src="D_NQ_NP_714770-MLA73725663383_122023-O.webp" alt="Papel Reciclado">
+                    <h3>Papel Reutilizável JOEN</h3>
+                    <p>A tecnologia de escrita que elimina o desperdício de papel.</p>
+                    <span class="preco">R$ 90,00</span>
+                    <a href="#" class="card-button">Ver Detalhes</a>
+                </div>
+
+                <div class="produto-card categoria-eletronicos">
+                    <img src="19-06-2019-16-02-26.jpeg" alt="Power Bank de Lítio JOEN">
+                    <h3>Power Bank de Lítio JOEN</h3>
+                    <p>A carga mais confiável e eficiente para seus dispositivos</p>
+                    <span class="preco">R$ 100,00</span>
+                    <a href="#" class="card-button">Ver Detalhes</a>
+                </div>
+
+                <div class="produto-card categoria-eletronicos">
+                    <img src="Wallbox-Pulsar-Plus-blanco.jpg.webp" alt="Wallbox JOEN">
+                    <h3>Wallbox JOEN</h3>
+                    <p>A Recarga Inteligente e Segura do seu Elétrico.</p>
+                    <span class="preco">R$ 3.000,00</span>
+                    <a href="#" class="card-button">Ver Detalhes</a>
+                </div>
+
+                <div class="produto-card categoria-agricolas">
+                    <img src="Water-Pump-with-Solar-Power.avif" alt="Bomba D'água Solar">
+                    <h3>Bomba D'água Solar 1HP</h3>
+                    <p>Solução eficiente para irrigação e bombeamento remoto.</p>
+                    <span class="preco">R$ 1.800,00</span>
+                    <a href="#" class="card-button">Ver Detalhes</a>
+                </div>
+
+                <div class="produto-card categoria-acessorios">
+                    <img src="eco-bag-pague-menos-verde-1unidade-principal.webp" alt="Ecobag JOEN">
+                    <h3>Ecobag JOEN</h3>
+                    <p>Feitas com materiais resistentes e de alta durabilidade</p>
+                    <span class="preco">R$ 50,00</span>
+                    <a href="#" class="card-button">Ver Detalhes</a>
+                </div>
+
+                <div class="produto-card categoria-eletronicos">
+                    <img src="caixa-de-som-bamboo-bluetooth-40661.webp" alt="Caixa de Som Eco Bamboo JOEN">
+                    <h3>Caixa de Som Eco Bamboo JOEN</h3>
+                    <p>Design eco sustentável exclusivo com a potência que sua música merece.</p>
+                    <span class="preco">R$ 150,00</span>
+                    <a href="#" class="card-button">Ver Detalhes</a>
+                </div>
+
+                <div class="produto-card categoria-domesticos">
+                    <img src="purif-diamante-plus-amb-320x320h.jpg.jpeg" alt="Filtro de Água por Gravidade JOEN">
+                    <h3>Filtro de Água por Gravidade JOEN</h3>
+                    <p>Água potável de alta qualidade sem depender de energia elétrica</p>
+                    <span class="preco">R$ 220,00</span>
+                    <a href="#" class="card-button">Ver Detalhes</a>
+                </div>
+
+                <div class="produto-card categoria-agricolas">
+                    <img src="WhatsApp-Image-2021-11-04-at-15.37.47-1200x675.jpeg" alt="Composteira Elétrica JOEN">
+                    <h3>Composteira Elétrica JOEN</h3>
+                    <p>Tecnologia de alta durabilidade aplicada à redução de resíduos.</p>
+                    <span class="preco">R$ 550,00</span>
+                    <a href="#" class="card-button">Ver Detalhes</a>
+                </div>
+                
+            </div>
+            
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // O seletor busca todos os links de categoria, que estão no dropdown
+            const linksDeFiltro = document.querySelectorAll('.categoria-link'); 
+            const cardsDeProdutos = document.querySelectorAll('.produto-card');
+            const navToggle = document.querySelector('.nav-toggle');
+            const mainNav = document.querySelector('.main-nav');
+
+            // --- Lógica do Filtro de Produtos ---
+            linksDeFiltro.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault(); 
+
+                    // 1. Atualiza a classe 'active' em TODOS os botões de filtro
+                    linksDeFiltro.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // 2. Obtém o filtro (ex: 'domesticos')
+                    const filtro = this.getAttribute('data-filter');
+
+                    // 3. Itera e filtra os cards
+                    cardsDeProdutos.forEach(card => {
+                        // Verifica se o card pertence à categoria clicada ou se o filtro é 'todos'
+                        if (filtro === 'todos' || card.classList.contains('categoria-' + filtro)) {
+                            card.style.display = 'block'; 
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Garante que o filtro 'todos' seja ativado ao carregar
+            const linkTodos = document.querySelector('.categoria-link[data-filter="todos"]');
+            if (linkTodos) {
+                linkTodos.click();
+            }
+
+
+            // --- Lógica de Menu Hamburger (Mobile) ---
+            if (navToggle && mainNav) {
+                navToggle.addEventListener('click', function() {
+                    mainNav.classList.toggle('open');
+                    const icon = navToggle.querySelector('i');
+                    if (mainNav.classList.contains('open')) {
+                        icon.classList.remove('fa-bars');
+                        icon.classList.add('fa-times');
+                    } else {
+                        icon.classList.remove('fa-times');
+                        icon.classList.add('fa-bars');
+                    }
+                });
+            }
+
+            // Fechar o menu ao clicar em um link (no mobile)
+            document.querySelectorAll('.nav__link').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (mainNav && navToggle && mainNav.classList.contains('open')) {
+                        mainNav.classList.remove('open');
+                        navToggle.querySelector('i').classList.remove('fa-times');
+                        navToggle.querySelector('i').classList.add('fa-bars');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

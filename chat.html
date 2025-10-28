@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JOEN assistente</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* 1. VARIÁVEIS CSS (Cores: Azul Escuro, Verde Escuro, Tons Claros) */
+        :root {
+            --color-primary: #158f0a; /* Verde Escuro (Acento Principal) */
+            --color-secondary: #084675; /* Azul Escuro (Para Botões de Opção e Botão Home) */
+            --color-background: #f0f4f7; /* Fundo Creme Claro */
+            --color-header: #ffffff; /* Fundo do Header/Input */
+            --color-text-dark: #333;
+            --color-text-light: #fff;
+            
+            --color-message-user: #e8f5e9; /* Bolha do usuário: Verde bem claro */
+            --color-message-system: #d5e6f6; /* Bolha do bot: Azul claro */
+            --font-main: 'Poppins', Arial, sans-serif;
+        }
+
+        /* 2. RESET BÁSICO E GLOBAIS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            min-height: 100vh;
+            font-family: var(--font-main);
+            background-color: var(--color-background);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* 1. CONTAINER PRINCIPAL (Configurado para Tela Cheia) */
+        .chat-container {
+            width: 100%;
+            height: 100vh; /* Ocupa 100% da altura da tela */
+            display: flex;
+            flex-direction: column;
+            border-radius: 0; 
+            box-shadow: none; 
+            overflow: hidden;
+            background-color: var(--color-header);
+        }
+
+        /* 2. HEADER - DESIGN MELHORADO */
+        .chat-header {
+            /* Gradiente sutil misturando azul e verde para profundidade */
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            color: var(--color-text-light);
+            padding: 15px 20px; 
+            font-weight: 600;
+            /* Sombra mais proeminente */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
+            position: sticky; /* Mantém o cabeçalho fixo no topo ao rolar */
+            top: 0;
+            z-index: 10;
+        }
+        
+        .header-content-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .header-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px; 
+            text-align: center;
+            flex-grow: 1;
+            font-size: 1.2em;
+        }
+
+        /* NOVO ESTILO PARA O SLOGAN */
+        .slogan {
+            font-size: 0.8em; /* Fonte menor */
+            font-weight: 400; /* Peso mais leve */
+            color: rgba(255, 255, 255, 0.85); /* Branco sutil */
+            margin-top: -5px; /* Puxa para mais perto do título */
+        }
+
+        /* Estilo para o botão de ícone (Voltar/Home) */
+        .icon-button {
+            background-color: var(--color-secondary); 
+            color: var(--color-text-light);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            flex-shrink: 0; 
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* APRIMORAMENTO DO ÍCONE DA PÁGINA INICIAL */
+        .icon-button i {
+            font-size: 1.4em; /* Ícone um pouco maior dentro do botão */
+        }
+
+        .icon-button:hover {
+            background-color: #05375d; 
+            transform: scale(1.05);
+        }
+
+        /* Placeholder para equilibrar o layout ou receber um novo ícone */
+        .button-placeholder {
+            width: 40px; 
+            height: 40px;
+            visibility: hidden; /* Invisível, mas ocupa espaço para alinhar o título */
+        }
+
+        /* Estilos do Logo */
+        .logo-placeholder {
+            width: 60px; 
+            height: 60px;
+            border-radius: 100%; 
+            overflow: hidden;
+            /* Borda dupla para destacar o logo no gradiente */
+            box-shadow: 0 0 0 3px var(--color-text-light), 0 0 0 6px rgba(255, 255, 255, 0.3);
+        }
+
+        .logo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* 3. BODY (Área de Mensagens) */
+        .chat-body {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: var(--color-background);
+        }
+
+        /* 4. MENSAGENS */
+        .message-wrapper {
+            display: flex;
+            margin-bottom: 15px; 
+        }
+        
+        .message {
+            padding: 10px 15px;
+            border-radius: 20px; 
+            max-width: 80%;
+            word-wrap: break-word;
+            line-height: 1.4; 
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05); 
+            font-size: 0.95em;
+        }
+
+        .user-message {
+            background-color: var(--color-message-user); 
+            margin-left: auto;
+            border-top-right-radius: 5px; 
+        }
+
+        .system-message {
+            background-color: var(--color-message-system); 
+            color: var(--color-text-dark);
+            margin-right: auto;
+            border-top-left-radius: 5px; 
+        }
+        
+        /* 5. OPÇÕES/MENU (Design Melhorado) */
+        .system-options {
+            margin-right: auto;
+            text-align: left;
+            padding: 0 10px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column; 
+            align-items: flex-start;
+        }
+
+        .option-button {
+            /* Estilo Base: Limpo e com borda */
+            background-color: var(--color-header); /* Fundo Branco/Claro */
+            color: var(--color-text-dark);
+            border: 2px solid; /* Borda definida pelo tema */
+            padding: 12px 18px;
+            margin-top: 8px; 
+            border-radius: 8px; 
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease-in-out; /* Transição suave para todas as propriedades */
+            width: fit-content;
+            display: flex; /* Para alinhar o ícone e o texto */
+            align-items: center;
+            gap: 10px; /* Espaço entre ícone e texto */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Tema Azul Escuro (Ímpar) */
+        .option-button.blue-theme {
+            border-color: var(--color-secondary); /* Borda Azul Escuro */
+            color: var(--color-secondary); /* Texto Azul Escuro */
+        }
+        .option-button.blue-theme:hover {
+            background-color: var(--color-secondary); /* Fundo Azul Escuro */
+            color: var(--color-text-light); /* Texto Branco */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .option-button.blue-theme:hover i {
+            color: var(--color-text-light); /* Ícone Branco no hover */
+        }
+
+        /* Tema Verde Escuro (Par) */
+        .option-button.green-theme {
+            border-color: var(--color-primary); /* Borda Verde Escuro */
+            color: var(--color-primary); /* Texto Verde Escuro */
+        }
+        .option-button.green-theme:hover {
+            background-color: var(--color-primary); /* Fundo Verde Escuro */
+            color: var(--color-text-light); /* Texto Branco */
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        .option-button.green-theme:hover i {
+             color: var(--color-text-light); /* Ícone Branco no hover */
+        }
+
+        .option-button i {
+            font-size: 1.1em;
+            transition: color 0.2s;
+        }
+
+        /* 6. INPUT */
+        .input-area {
+            padding: 15px;
+            border-top: 1px solid #eeeeee;
+            display: flex;
+            background-color: var(--color-header);
+        }
+
+        #messageInput {
+            flex-grow: 1;
+            padding: 12px;
+            border: 1px solid #dddddd;
+            border-radius: 25px; 
+            margin-right: 10px;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.2s;
+            font-family: var(--font-main);
+        }
+
+        #messageInput:focus {
+            border-color: var(--color-primary);
+        }
+
+        .send-button {
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            flex-shrink: 0;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        .send-button:hover {
+            background-color: #16653a;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="chat-header">
+        <div class="header-content-wrapper">
+            <!-- BOTÃO HOME/VOLTAR (Esquerda) -->
+            <!-- MUDANÇA: O onclick agora chama a função 'goHomeAndReset()' -->
+            <button id="homeButton" class="icon-button" onclick="goHomeAndReset()" title="Ir para a Página Inicial e Resetar">
+                <i class="fas fa-home"></i>
+            </button>
+
+            <div class="header-center">
+                <div class="logo-placeholder">
+                    <!-- URL de placeholder usada -->
+                    <img src="remover a frase da i.png" alt="Logo JOEN" class="logo-img">
+                </div>
+                JOEN assistente
+                <!-- SLOGAN DA LOJA -->
+                <span class="slogan">A inovação no seu atendimento.</span>
+            </div>
+
+            <!-- Placeholder para equilibrar o layout. Você pode transformá-lo em um botão de perfil, configurações ou histórico de chat! -->
+            <div class="button-placeholder"></div>
+        </div>
+    </div>
+    <div class="chat-body" id="chatBody">
+        <!-- Mensagens serão carregadas aqui -->
+    </div>
+    <div class="input-area">
+        <input type="text" id="messageInput" placeholder="Digite sua mensagem..." disabled>
+        <button onclick="sendMessage()" class="send-button">
+             <i class="fas fa-paper-plane"></i> Enviar
+        </button>
+    </div>
+</div>
+
+<script>
+    // --- JAVASCRIPT REVISADO ---
+
+    const chatBody = document.getElementById('chatBody');
+    const messageInput = document.getElementById('messageInput');
+    
+    // VARIÁVEL PARA A URL DA SUA PÁGINA INICIAL
+    // MUDE ESTA URL PARA O ENDEREÇO DA PÁGINA INICIAL DA SUA LOJA
+    const HOME_PAGE_URL = "index.html"; 
+
+    /**
+     * Função para limpar o chat e retornar às opções iniciais.
+     */
+    function resetChat() {
+        // Limpa todas as mensagens do corpo do chat
+        chatBody.innerHTML = ''; 
+        // Desativa o input e limpa o valor (estado inicial)
+        messageInput.value = '';
+        messageInput.disabled = true;
+        // Adiciona as opções iniciais
+        addOptions();
+    }
+    
+    /**
+     * Função que combina o reset do chat com a navegação para a página inicial.
+     */
+    function goHomeAndReset() {
+        // 1. Opcional: Reseta o estado do chat antes de sair (boa prática)
+        resetChat(); 
+        
+        // 2. Redireciona o usuário para a página inicial da loja
+        window.location.href = HOME_PAGE_URL;
+    }
+
+
+    // Função para adicionar uma nova mensagem ao chat
+    function addMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message');
+        
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('message-wrapper');
+
+        if (sender === 'user') {
+            messageDiv.classList.add('user-message');
+            wrapper.style.justifyContent = 'flex-end'; // Alinha à direita
+        } else {
+            messageDiv.classList.add('system-message');
+            wrapper.style.justifyContent = 'flex-start'; // Alinha à esquerda
+        }
+
+        messageDiv.textContent = text;
+        
+        wrapper.appendChild(messageDiv);
+        chatBody.appendChild(wrapper);
+        
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    // Função para adicionar as categorias de Avaliação
+    function addFeedbackCategories() {
+        addMessage("Certo! Em qual área você gostaria de focar seu feedback?", 'system');
+        
+        const categoriesDiv = document.createElement('div');
+        categoriesDiv.classList.add('system-options'); 
+        
+        const categories = [
+            { text: "Qualidade do Serviço/Produto", prompt: "Por favor, especifique seu feedback sobre a qualidade do nosso produto/serviço.", icon: "fas fa-star" },
+            { text: "Atendimento ao Cliente", prompt: "Qual a sua avaliação sobre o atendimento que recebeu?", icon: "fas fa-headset" },
+            { text: "Logística/Entrega", prompt: "Gostaríamos de saber sobre sua experiência com a logística e prazos de entrega.", icon: "fas fa-shipping-fast" },
+            { text: "Sugestão Geral", prompt: "Digite sua sugestão ou feedback geral aqui.", icon: "fas fa-lightbulb" }
+        ];
+
+        categories.forEach((category, index) => {
+            const button = document.createElement('button');
+            button.classList.add('option-button');
+            
+            // Alterna entre os temas Azul e Verde para as sub-opções
+            button.classList.add(index % 2 === 0 ? 'blue-theme' : 'green-theme');
+
+            // Adiciona o ícone
+            const icon = document.createElement('i');
+            icon.classList.add(...category.icon.split(' '));
+            
+            // Define o conteúdo como Ícone + Texto
+            button.innerHTML = icon.outerHTML + ' ' + category.text;
+
+            // O clique na sub-opção remove os botões e mostra o prompt final
+            button.onclick = () => handleSubOptionClick(category.prompt, category.text, categoriesDiv);
+            categoriesDiv.appendChild(button);
+        });
+
+        chatBody.appendChild(categoriesDiv);
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+    
+    // Lida com o clique nas sub-opções de Feedback
+    function handleSubOptionClick(systemPrompt, optionText, optionsDiv) {
+        // Envia a escolha do usuário como uma mensagem
+        addMessage(optionText, 'user');
+        
+        // Remove os botões de sub-opção
+        optionsDiv.remove(); // Remove o elemento div inteiro
+        
+        // Mostra o prompt final
+        addMessage(systemPrompt, 'system');
+        
+        messageInput.disabled = false;
+        messageInput.focus();
+    }
+
+
+    // Lida com o clique nos botões de opção principal
+    function handleOptionClick(action, optionText, optionsDiv) {
+        // Envia a escolha do usuário como uma mensagem
+        addMessage(optionText, 'user');
+        
+        // Remove os botões de opção principal
+        optionsDiv.remove(); 
+        
+        // Simula uma resposta do sistema baseada na escolha
+        if (action === "handleFeedback") {
+            addFeedbackCategories(); // Chama a nova função de categorias
+        } else if (action === "handleProposal") {
+            addMessage("Interessante! Por favor, comece digitando um resumo da sua proposta (ex: Título e Valor Estimado) e seus dados de contato. Nosso time irá analisar.", 'system');
+            messageInput.disabled = false;
+            messageInput.focus();
+        } else if (action === "handleOffer") {
+            addMessage("Agradecemos o interesse! Por favor, comece descrevendo o produto que você deseja vender ou oferecer. Não esqueça de deixar seu contato.", 'system');
+            messageInput.disabled = false;
+            messageInput.focus();
+        } else if (action === "handleGeneralContact") {
+            addMessage("Entendido. Por favor, digite sua dúvida ou o assunto de interesse, incluindo seu email de contato. Responderemos o mais breve possível.", 'system');
+            messageInput.disabled = false;
+            messageInput.focus();
+        }
+    }
+
+
+    // Função para adicionar os botões de opção inicial
+    function addOptions() {
+        addMessage("Olá! Seja bem-vindo(a). Por favor, selecione o tipo de interação que você deseja:", 'system');
+        
+        const optionsDiv = document.createElement('div');
+        optionsDiv.classList.add('system-options'); 
+        
+        const options = [
+            { text: "Avaliação/Feedback", action: "handleFeedback", icon: "fas fa-comment-dots" },
+            { text: "Proposta de Investimento/Parceria", action: "handleProposal", icon: "fas fa-handshake" },
+            { text: "Logística/Entrega", action: "handleProposal", icon: "fas fa-truck" },
+            { text: "Oferta de Produto/Venda", action: "handleOffer", icon: "fas fa-tag" },
+            { text: "Outros Assuntos/Dúvidas", action: "handleGeneralContact", icon: "fas fa-question-circle" } 
+        ];
+
+        options.forEach((option, index) => {
+            const button = document.createElement('button');
+            button.classList.add('option-button');
+            
+            // Alterna o tema de cor: Azul (0, 2, 4...) e Verde (1, 3, 5...)
+            button.classList.add(index % 2 === 0 ? 'blue-theme' : 'green-theme');
+
+            // Adiciona o ícone
+            const icon = document.createElement('i');
+            icon.classList.add(...option.icon.split(' '));
+            
+            // Define o conteúdo como Ícone + Texto
+            button.innerHTML = icon.outerHTML + ' ' + option.text;
+
+            button.onclick = () => handleOptionClick(option.action, option.text, optionsDiv);
+            optionsDiv.appendChild(button);
+        });
+
+        chatBody.appendChild(optionsDiv);
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }
+
+    // Lida com o envio de mensagens (após o usuário escolher uma opção)
+    function sendMessage() {
+        const text = messageInput.value.trim();
+        if (text === "") return;
+
+        addMessage(text, 'user');
+        messageInput.value = '';
+
+        // Simulação de resposta de confirmação (sem back-end real)
+        if (!messageInput.disabled) {
+            addMessage("Mensagem recebida com sucesso. Faremos a análise e entraremos em contato. Obrigado!", 'system');
+            messageInput.disabled = true; 
+        }
+    }
+
+    // Permite enviar mensagem pressionando Enter
+    document.querySelector('.input-area button').addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault(); 
+            sendMessage();
+        }
+    });
+
+    // Inicia o chat com as opções
+    window.onload = addOptions;
+
+</script>
+</body>
+</html>
+
+
